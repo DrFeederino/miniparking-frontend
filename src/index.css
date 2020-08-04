@@ -1,0 +1,20 @@
+@font-face {
+    font-family: museo-slab-700;
+    src: url('./fonts/Museo_Slab/museo-slab-700.otf');
+}
+@font-face {
+    font-family: museo-sans-700;
+    src: url('./fonts/Museo_Sans/Museo_Sans-700.otf');
+}
+@font-face {
+    font-family: museo-sans-900;
+    src: url('./fonts/Museo_Sans/MuseoSans-900.otf');
+}
+@font-face {
+    font-family: source-hans-light;
+    src: url('./fonts/Source_Hans/SourceSansPro-Light.otf');
+}
+@font-face {
+    font-family: source-hans-bold;
+    src: url('./fonts/Source_Hans/SourceSansPro-Bold.otf');
+}

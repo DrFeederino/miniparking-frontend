@@ -1,0 +1,42 @@
+body {
+    font-family: museo-slab, source-han-sans-simplified-c, "Source Sans Pro", arial, helvetica, sans-serif !important;
+}
+.MuiTypography-h6 {
+    font-family: museo-sans-900 !important;
+}
+.MuiTableCell-root {
+    font-family: museo-sans-900 !important;
+}
+.MuiTypography-body1 {
+    font-family: museo-sans-900 !important;
+}
+.MuiTableCell-root {
+    font-family: source-hans-light !important;
+    font-size: 17px !important;
+}
+.MuiListItemText-primary {
+    font-family: source-hans-bold !important;
+}
+.MuiInputBase-input {
+    font-family: source-hans-light !important;
+}
+.MuiButton-label {
+    font-family: museo-sans-700 !important;
+    font-weight: 900;
+}
+.MuiFormLabel-root {
+    font-family: source-hans-light !important;
+}
+.MuiMenuItem-root {
+    font-family: source-hans-light !important;
+}
+.MuiTypography-subtitle1 {
+    font-family: source-hans-light !important;
+}
+.MuiTypography-h5 {
+    font-family: source-hans-bold !important;
+}
+.MuiInput-input {
+    font-family: source-hans-light !important;
+    font-size: 15px !important;
+}
