@@ -17,12 +17,12 @@ const Location = ({ setStatus, refresh }) => {
   const { classes } = useStoreState((state) => state.classes);
   const { office } = useStoreState((state) => state.offices);
 
-  const updateOffice = (data) => {
+  const updateOffice = async (data) => {
     if ('message' in data !== true) {
       setName('');
       setNumber(0);
       setStatus();
-      refresh();
+      await refresh();
     } else {
       setErrorMsg(data.message);
     }
@@ -37,7 +37,7 @@ const Location = ({ setStatus, refresh }) => {
       officeId: office.id,
     };
     const data = await fetchData('locations', 'POST', location);
-    updateOffice(data);
+    await updateOffice(data);
   };
 
   return (

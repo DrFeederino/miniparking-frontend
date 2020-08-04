@@ -20,6 +20,9 @@ import Location from './location';
 import LocationMap from './locationmap';
 import fetchData from '../../utils/fetchData';
 
+const LOCATION_ID_URL = (id) => `locations/${id}`;
+const OFFICE_ID_URL = (id) => `offices/${id}`;
+
 const Locations = () => {
   const { locations } = useStoreState((state) => state.locations);
   const { office } = useStoreState((state) => state.offices);
@@ -31,28 +34,33 @@ const Locations = () => {
   const [errorMsg, setErrorMsg] = useState('');
   const classes = useStyles();
 
-  useEffect(() => {
-    if (office !== null) {
-      handleRefreshData();
-    }
-  }, []);
-
   const fetchLocationsFromOffice = async (office) => {
     const fetchedLocations = [];
-    for (let i = 0; i < office.locationIds.length; i++) {
+    for (let i = 0; i < office.locationIds.length; i += 1) {
       const locationId = office.locationIds[i];
-      const response = await fetchData(`locations/${locationId}`, 'GET', null);
-      if ('message' in response !== true) {
-        fetchedLocations.push(response);
+      const fetchedLocation = await fetchData(
+        LOCATION_ID_URL(locationId),
+        'GET',
+        null,
+      );
+      if ('message' in fetchedLocation !== true) {
+        fetchedLocation.spots = [];
+        fetchedLocation.spotIds.sort((first, second) => first - second);
+        fetchedLocation.spotIds.forEach(async (id) => {
+          const spot = await fetchData(`spots/${id}`, 'GET', null);
+          fetchedLocation.spots.push(spot);
+        });
+        fetchedLocations.push(fetchedLocation);
       } else {
-        setErrorMsg(response.message);
+        setErrorMsg(fetchedLocation.message || '');
+        return [];
       }
     }
     return fetchedLocations;
   };
 
   const handleRefreshData = async () => {
-    const data = await fetchData(`offices/${office.id}`, 'GET', null);
+    const data = await fetchData(OFFICE_ID_URL(office.id), 'GET', null);
     setOffice(data);
     const fetchedLocations = await fetchLocationsFromOffice(data);
     setLocations(fetchedLocations);
@@ -66,15 +74,21 @@ const Locations = () => {
       ...office,
       officeTitle: name,
     };
-    const data = await fetchData(`offices/${office.id}`, 'PUT', body);
+    const data = await fetchData(OFFICE_ID_URL(office.id), 'PUT', body);
     if ('message' in data) {
-      setErrorMsg(data.message);
+      setErrorMsg(data.message || '');
     } else {
       setOffice(data);
       setName('');
       setIsEditing(false);
     }
   };
+
+  useEffect(() => {
+    if (office !== null) {
+      handleRefreshData();
+    }
+  }, []);
 
   return office ? (
     <>
@@ -84,7 +98,12 @@ const Locations = () => {
             <Typography component="h2" variant="h6" gutterBottom>
               {`Office at ${office.officeTitle}`}
             </Typography>
-            <Tooltip title="Edit office name" onClick={handleEditing} disabled={isEditing} className={clsx(classes.tooltip, classes.edit)}>
+            <Tooltip
+              title="Edit office name"
+              onClick={handleEditing}
+              disabled={isEditing}
+              className={clsx(classes.tooltip, classes.edit)}
+            >
               <IconButton>
                 <EditIcon />
               </IconButton>
@@ -125,22 +144,25 @@ const Locations = () => {
           </Collapse>
         </Paper>
       </Grid>
-      {locations.map((location) => (
-        <Grid item xs={12} md={12} lg={12} key={location.id}>
-          <Paper className={classes.paper}>
-            <LocationMap location={location} refresh={handleRefreshData} />
-          </Paper>
-        </Grid>
-      ))}
+      {locations.length > 0
+        && locations.map((location) => (
+          <LocationMap
+            key={location.id}
+            location={location}
+            spots={location.spots}
+            refresh={handleRefreshData}
+          />
+        ))}
       <Grid item xs={12} md={12} lg={12}>
         <Paper className={classes.paper}>
           <div className={classes.collapse}>
             <Button
               startIcon={(
-                <ArrowForwardIosIcon style={{
-                  transform: `rotate(${isAdding ? '90deg' : '0deg'})`,
-                  transition: 'all 330ms ease-in-out',
-                }}
+                <ArrowForwardIosIcon
+                  style={{
+                    transform: `rotate(${isAdding ? '90deg' : '0deg'})`,
+                    transition: 'all 330ms ease-in-out',
+                  }}
                 />
               )}
               onClick={handleAdding}
@@ -154,14 +176,13 @@ const Locations = () => {
         </Paper>
       </Grid>
     </>
-  )
-    : (
-      <Grid item xs={12} md={12} lg={12} style={{ height: '100%' }}>
-        <Typography component="h2" variant="h5" className={classes.nodata}>
-          No office was selected, please select it from Offices menu
-        </Typography>
-      </Grid>
-    );
+  ) : (
+    <Grid item xs={12} md={12} lg={12} style={{ height: '100%' }}>
+      <Typography component="h2" variant="h5" className={classes.nodata}>
+        No office was selected, please select it from Offices menu
+      </Typography>
+    </Grid>
+  );
 };
 
 export default Locations;

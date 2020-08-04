@@ -92,7 +92,8 @@ const Spot = ({
     }
     currentSpot.available = true;
     currentSpot.driverId = null;
-    return await updateSpot(currentSpot);
+    const spot = await updateSpot(currentSpot);
+    return spot;
   };
 
   const getDriverAndReleaseSpot = async (id) => {
@@ -102,7 +103,8 @@ const Spot = ({
     driversSpot.driverId = null;
     await fetchData(`spots/${driversSpot.id}`, 'PUT', driversSpot);
     driver.spotId = null;
-    return await fetchData(`drivers/${driver.id}`, 'PUT', driver);
+    const data = await fetchData(`drivers/${driver.id}`, 'PUT', driver);
+    return data;
   };
 
   const handleSubmitAfterConfirm = async () => {

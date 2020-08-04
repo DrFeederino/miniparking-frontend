@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import {
   Grid, Typography,
 } from '@material-ui/core';
@@ -6,32 +6,9 @@ import {
   useStoreState,
 } from 'easy-peasy';
 import Spot from './spot';
-import fetchData from '../../utils/fetchData';
 
-const Spots = ({ location }) => {
+const Spots = ({ location, spots, refresh }) => {
   const { classes } = useStoreState((state) => state.classes);
-  const [spots, setSpots] = useState([]);
-
-  const handleRefreshData = async () => {
-    const fetchedSpots = [];
-    const spotIds = [];
-    location.spotIds.forEach(spot => spotIds.push(spot));
-    spotIds.sort((first, second) => first - second);
-    for (let i = 0; i < spotIds.length; i++) {
-      const spotId = spotIds[i];
-      const response = await fetchData(`spots/${spotId}`, 'GET', null);
-      if ('message' in response !== true) {
-        fetchedSpots.push(response);
-      }
-    }
-    setSpots(fetchedSpots);
-  };
-
-  useEffect(() => {
-    if (spots.length === 0) {
-      handleRefreshData();
-    }
-  }, [location]);
 
   return (
     <>
@@ -45,8 +22,8 @@ const Spots = ({ location }) => {
                 name={spot.spotTitle}
                 available={spot.available}
                 driverId={spot.driverId}
-                refresh={handleRefreshData}
                 officeId={location.officeId}
+                refresh={refresh}
               />
             ))
             : (
