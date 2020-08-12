@@ -34,7 +34,7 @@ const Locations = () => {
   const [errorMsg, setErrorMsg] = useState('');
   const classes = useStyles();
 
-  const fetchLocationsFromOffice = async (office) => {
+  const fetchLocationsFromOffice = async () => {
     const fetchedLocations = [];
     for (let i = 0; i < office.locationIds.length; i += 1) {
       const locationId = office.locationIds[i];
@@ -44,12 +44,6 @@ const Locations = () => {
         null,
       );
       if ('message' in fetchedLocation !== true) {
-        fetchedLocation.spots = [];
-        fetchedLocation.spotIds.sort((first, second) => first - second);
-        fetchedLocation.spotIds.forEach(async (id) => {
-          const spot = await fetchData(`spots/${id}`, 'GET', null);
-          fetchedLocation.spots.push(spot);
-        });
         fetchedLocations.push(fetchedLocation);
       } else {
         setErrorMsg(fetchedLocation.message || '');

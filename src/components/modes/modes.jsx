@@ -45,7 +45,9 @@ const availableModes = [
 const Modes = () => {
   const classes = useStyles();
   const { currentMode, modes } = useStoreState((state) => state.modes);
-  const { setCurrentMode, setModes } = useStoreActions((actions) => actions.modes);
+  const { setCurrentMode, setModes } = useStoreActions(
+    (actions) => actions.modes,
+  );
   const [open, setOpen] = React.useState(false);
   const { setClasses } = useStoreActions((actions) => actions.classes);
 
@@ -65,18 +67,30 @@ const Modes = () => {
   return (
     <div className={classes.root}>
       <CssBaseline />
-      <AppBar position="absolute" className={clsx(classes.appBar, open && classes.appBarShift)}>
+      <AppBar
+        position="absolute"
+        className={clsx(classes.appBar, open && classes.appBarShift)}
+      >
         <Toolbar>
           <IconButton
             edge="start"
             color="inherit"
             aria-label="open drawer"
             onClick={handleDrawer}
-            className={clsx(classes.menuButton, open && classes.menuButtonHidden)}
+            className={clsx(
+              classes.menuButton,
+              open && classes.menuButtonHidden,
+            )}
           >
             <MenuIcon />
           </IconButton>
-          <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
+          <Typography
+            component="h1"
+            variant="h6"
+            color="inherit"
+            noWrap
+            className={classes.title}
+          >
             {availableModes[currentMode].title}
           </Typography>
         </Toolbar>
@@ -99,7 +113,7 @@ const Modes = () => {
             <ListItem
               id={index}
               button
-              key={index}
+              key={mode.title}
               onClick={handleMode}
               selected={currentMode === index}
             >

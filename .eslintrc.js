@@ -22,5 +22,10 @@ module.exports = {
     'react',
   ],
   rules: {
+    'react/jsx-props-no-spreading': "off",
+    'react/prop-types': "off",
+    'no-await-in-loop': "off",
+    'no-param-reassign': "off",
+    'no-return-await': "off",
   },
 };

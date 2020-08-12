@@ -1,9 +1,5 @@
 import React, { useState } from 'react';
-import {
-  Grid,
-  TextField,
-  IconButton,
-} from '@material-ui/core';
+import { Grid, TextField, IconButton } from '@material-ui/core';
 import { useStoreState } from 'easy-peasy';
 import AddIcon from '@material-ui/icons/Add';
 import CloseIcon from '@material-ui/icons/Close';

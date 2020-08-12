@@ -39,14 +39,13 @@ const Spot = ({
     handleRefreshData();
   }, [driverId]);
 
-
   const updateSpot = async (spot) => await fetchData(`spots/${spot.id}`, 'PUT', spot);
 
   const updateDriver = async (driver) => await fetchData(`drivers/${driver.id}`, 'PUT', driver);
 
-  const getDriver = async (id) => await fetchData(`drivers/${id}`, 'GET', null);
+  const getDriver = async (driversId) => await fetchData(`drivers/${driversId}`, 'GET', null);
 
-  const getSpot = async (id) => await fetchData(`spots/${id}`, 'GET', null);
+  const getSpot = async (spotsId) => await fetchData(`spots/${spotsId}`, 'GET', null);
 
   const handleOpen = () => setOpen(!open);
 
@@ -86,7 +85,11 @@ const Spot = ({
   const getAndRemoveDriverIfSpotIsTaken = async () => {
     const currentSpot = await getSpot(spotId);
     if (currentSpot.driverId) {
-      const currentSpotDriver = await fetchData(`drivers/${currentSpot.driverId}`, 'GET', null);
+      const currentSpotDriver = await fetchData(
+        `drivers/${currentSpot.driverId}`,
+        'GET',
+        null,
+      );
       currentSpotDriver.spotId = null;
       await updateDriver(currentSpotDriver);
     }
@@ -96,8 +99,8 @@ const Spot = ({
     return spot;
   };
 
-  const getDriverAndReleaseSpot = async (id) => {
-    const driver = await getDriver(id);
+  const getDriverAndReleaseSpot = async (selectedId) => {
+    const driver = await getDriver(selectedId);
     const driversSpot = await fetchData(`spots/${driver.spotId}`, 'GET', null);
     driversSpot.available = true;
     driversSpot.driverId = null;
@@ -131,13 +134,12 @@ const Spot = ({
           className={classes.spot}
         >
           <div>
-            <Typography className={classes.spotTitle}>
-              {name || ''}
-            </Typography>
+            <Typography className={classes.spotTitle}>{name || ''}</Typography>
           </div>
-          <div style={{
-            padding: '0 4px',
-          }}
+          <div
+            style={{
+              padding: '0 4px',
+            }}
           >
             <Typography
               style={{
@@ -153,7 +155,11 @@ const Spot = ({
           </div>
         </Card>
       </Paper>
-      <Dialog open={open} onClose={handleOpen} aria-labelledby="form-dialog-title">
+      <Dialog
+        open={open}
+        onClose={handleOpen}
+        aria-labelledby="form-dialog-title"
+      >
         <DialogTitle id="form-dialog-title">Select a driver</DialogTitle>
         <DialogContent>
           <DialogContentText>
@@ -167,34 +173,56 @@ const Spot = ({
             <MenuItem value="none">
               <em>None</em>
             </MenuItem>
-            {drivers.length > 0 && drivers.map((driver) => (
-              <MenuItem key={driver.id + driver.email} value={driver.id}>
-                {driver.name}
-              </MenuItem>
-            ))}
+            {drivers.length > 0
+              && drivers.map((driver) => (
+                <MenuItem key={driver.id + driver.email} value={driver.id}>
+                  {driver.name}
+                </MenuItem>
+              ))}
           </Select>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleOpen} color="primary" className={clsx(classes.delete, classes.next)}>
+          <Button
+            onClick={handleOpen}
+            color="primary"
+            className={clsx(classes.delete, classes.next)}
+          >
             Cancel
           </Button>
-          <Button onClick={handleSubmit} color="primary" className={clsx(classes.next, classes.proceed)}>
+          <Button
+            onClick={handleSubmit}
+            color="primary"
+            className={clsx(classes.next, classes.proceed)}
+          >
             Select
           </Button>
         </DialogActions>
       </Dialog>
-      <Dialog open={confirm} onClose={handleConfirm} aria-labelledby="form-dialog-title">
+      <Dialog
+        open={confirm}
+        onClose={handleConfirm}
+        aria-labelledby="form-dialog-title"
+      >
         <DialogTitle id="form-dialog-title">Confirm reassignment</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            Current driver has an assigned spot already, are you sure you want to reassign the spot?
+            Current driver has an assigned spot already, are you sure you want
+            to reassign the spot?
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleConfirm} color="primary" className={clsx(classes.delete, classes.next)}>
+          <Button
+            onClick={handleConfirm}
+            color="primary"
+            className={clsx(classes.delete, classes.next)}
+          >
             Cancel
           </Button>
-          <Button onClick={handleSubmitAfterConfirm} color="primary" className={clsx(classes.next, classes.proceed)}>
+          <Button
+            onClick={handleSubmitAfterConfirm}
+            color="primary"
+            className={clsx(classes.next, classes.proceed)}
+          >
             Confirm
           </Button>
         </DialogActions>

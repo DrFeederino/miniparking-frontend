@@ -40,8 +40,16 @@ const LocationMap = ({ location, spots, refresh }) => {
     e.preventDefault();
     setErrorMsg('');
     const [from, to] = range;
-    const currentLocation = await fetchData(`locations/${location.id}`, 'GET', null);
-    const response = await fetchData(`spots/?name=${spotName}&from=${from}&to=${to}`, 'POST', currentLocation);
+    const currentLocation = await fetchData(
+      `locations/${location.id}`,
+      'GET',
+      null,
+    );
+    const response = await fetchData(
+      `spots/?name=${spotName}&from=${from}&to=${to}`,
+      'POST',
+      currentLocation,
+    );
     await refresh();
     if ('message' in response !== true) {
       setIsAddingSpots(false);
@@ -78,17 +86,37 @@ const LocationMap = ({ location, spots, refresh }) => {
               {location.locationTitle || 'No name'}
             </Typography>
             <div className={classes.buttons}>
-              <Tooltip title="Delete location" onClick={handleDelete} color="secondary" variant="contained" className={clsx(classes.tooltip, classes.delete)}>
+              <Tooltip
+                title="Delete location"
+                onClick={handleDelete}
+                color="secondary"
+                variant="contained"
+                className={clsx(classes.tooltip, classes.delete)}
+              >
                 <IconButton>
                   <DeleteIcon />
                 </IconButton>
               </Tooltip>
-              <Tooltip disabled={isEditing} title="Edit location name" onClick={handleEditing} color="secondary" variant="contained" className={clsx(classes.tooltip, classes.edit)}>
+              <Tooltip
+                disabled={isEditing}
+                title="Edit location name"
+                onClick={handleEditing}
+                color="secondary"
+                variant="contained"
+                className={clsx(classes.tooltip, classes.edit)}
+              >
                 <IconButton>
                   <EditIcon />
                 </IconButton>
               </Tooltip>
-              <Tooltip disabled={isAddingSpots} title="Add spots" onClick={handleIsAddingSpots} color="secondary" variant="contained" className={clsx(classes.tooltip, classes.proceed)}>
+              <Tooltip
+                disabled={isAddingSpots}
+                title="Add spots"
+                onClick={handleIsAddingSpots}
+                color="secondary"
+                variant="contained"
+                className={clsx(classes.tooltip, classes.proceed)}
+              >
                 <IconButton>
                   <AddIcon />
                 </IconButton>
@@ -158,9 +186,7 @@ const LocationMap = ({ location, spots, refresh }) => {
                 error={errorMsg !== ''}
                 helperText={errorMsg}
               />
-              <Typography gutterBottom>
-                Range
-              </Typography>
+              <Typography gutterBottom>Range</Typography>
               <Slider
                 min={1}
                 max={location.capacity || 100}
@@ -169,10 +195,18 @@ const LocationMap = ({ location, spots, refresh }) => {
                 valueLabelDisplay="auto"
               />
               <div className={classes.buttons}>
-                <IconButton variant="contained" className={clsx(classes.next, classes.delete)} onClick={handleIsAddingSpots}>
+                <IconButton
+                  variant="contained"
+                  className={clsx(classes.next, classes.delete)}
+                  onClick={handleIsAddingSpots}
+                >
                   <CloseIcon />
                 </IconButton>
-                <IconButton type="submit" variant="contained" className={clsx(classes.next, classes.proceed)}>
+                <IconButton
+                  type="submit"
+                  variant="contained"
+                  className={clsx(classes.next, classes.proceed)}
+                >
                   <AddIcon />
                 </IconButton>
               </div>
@@ -181,12 +215,13 @@ const LocationMap = ({ location, spots, refresh }) => {
           <div className={classes.collapse}>
             <Button
               startIcon={(
-                <ArrowForwardIosIcon style={{
-                  transform: `rotate(${isShowing ? '90deg' : '0deg'})`,
-                  transition: 'all 330ms ease-in-out',
-                }}
+                <ArrowForwardIosIcon
+                  style={{
+                    transform: `rotate(${isShowing ? '90deg' : '0deg'})`,
+                    transition: 'all 330ms ease-in-out',
+                  }}
                 />
-)}
+              )}
               onClick={handleShowing}
             >
               Show spots

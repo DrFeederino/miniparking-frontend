@@ -27,7 +27,6 @@ import {
 } from '@material-ui/lab';
 import fetchData from '../../utils/fetchData';
 
-
 const tableIcons = {
   Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
   Check: forwardRef((props, ref) => <Check {...props} ref={ref} />),
@@ -94,7 +93,7 @@ const Drivers = () => {
       return EMPTY_DATA;
     }
 
-    for (let i = 0; i < data.length; i++) {
+    for (let i = 0; i < data.length; i += 1) {
       const el = data[i];
       el.office = 'None';
       if (el.officeId) {
@@ -160,7 +159,6 @@ const Drivers = () => {
   useEffect(() => {
     handleRefreshData();
   }, []);
-
 
   return (
     <>

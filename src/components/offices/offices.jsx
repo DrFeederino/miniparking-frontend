@@ -1,6 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import {
-  Paper, Button, Collapse, Typography, Grid, Select, MenuItem,
+  Paper,
+  Button,
+  Collapse,
+  Typography,
+  Grid,
+  Select,
+  MenuItem,
 } from '@material-ui/core';
 import { useStoreActions, useStoreState } from 'easy-peasy';
 import clsx from 'clsx';
@@ -15,20 +21,22 @@ import OfficesTable from './officestable';
 const Offices = () => {
   const classes = useStyles();
   const { offices } = useStoreState((state) => state.offices);
-  const { setOffices, setOffice } = useStoreActions((actions) => actions.offices);
+  const { setOffices, setOffice } = useStoreActions(
+    (actions) => actions.offices,
+  );
   const { setCurrentMode } = useStoreActions((actions) => actions.modes);
   const { currentMode } = useStoreState((state) => state.modes);
   const [isAdding, setIsAdding] = useState(false);
   const [val, setVal] = useState('none');
 
-  useEffect(() => {
-    handleRefreshData();
-  }, []);
-
   const handleRefreshData = async () => {
     const data = await fetchData('offices', 'GET', null);
     setOffices(data);
   };
+
+  useEffect(() => {
+    handleRefreshData();
+  }, []);
 
   const handleDelete = async () => {
     if (offices !== null && offices.length && val !== 'none') {
@@ -64,11 +72,13 @@ const Offices = () => {
               style={{ width: '100%' }}
               value={val}
             >
-              <MenuItem value='none'>
+              <MenuItem value="none">
                 <em>None</em>
               </MenuItem>
               {offices.map((office, index) => (
-                <MenuItem key={office.id} value={index}>{`${`Office at ${office.officeTitle} Str`}`}</MenuItem>
+                <MenuItem key={office.id} value={index}>
+                  {`${`Office at ${office.officeTitle} Str`}`}
+                </MenuItem>
               ))}
             </Select>
             <div className={classes.buttons}>
@@ -97,12 +107,13 @@ const Offices = () => {
           <div className={classes.collapse}>
             <Button
               startIcon={(
-                <ArrowForwardIosIcon style={{
-                  transform: `rotate(${isAdding ? '90deg' : '0deg'})`,
-                  transition: 'all 330ms ease-in-out',
-                }}
+                <ArrowForwardIosIcon
+                  style={{
+                    transform: `rotate(${isAdding ? '90deg' : '0deg'})`,
+                    transition: 'all 330ms ease-in-out',
+                  }}
                 />
-)}
+              )}
               onClick={() => setIsAdding(!isAdding)}
             >
               Add an office
