@@ -9,7 +9,6 @@ const fetchData = async (path, method, body) => {
     },
     body: body ? JSON.stringify(body) : null,
   });
-  console.log('lol did we finish', method, path)
   if (method !== 'DELETE') {
     const data = await response.json();
     return data;

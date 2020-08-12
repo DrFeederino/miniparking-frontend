@@ -64,7 +64,7 @@ const LocationMap = ({ location, spots, refresh }) => {
 
   const handleDelete = async () => {
     const { locationIds } = office;
-    office.locationIds = locationIds.filter(locId => locId !== location.id);
+    office.locationIds = locationIds.filter((locId) => locId !== location.id);
     setOffice(office);
     await fetchData(`locations/${location.id}`, 'DELETE', null);
     await refresh();

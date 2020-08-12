@@ -14,7 +14,6 @@ const Location = ({ setStatus, refresh }) => {
   const { office } = useStoreState((state) => state.offices);
   const { setOffice } = useStoreActions((actions) => actions.offices);
 
-
   const updateOffice = async (data) => {
     if ('message' in data !== true) {
       setName('');
