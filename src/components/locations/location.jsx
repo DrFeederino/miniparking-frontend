@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Grid, TextField, IconButton } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import CloseIcon from '@material-ui/icons/Close';
-import { useStoreState } from 'easy-peasy';
+import { useStoreState, useStoreActions } from 'easy-peasy';
 import clsx from 'clsx';
 import fetchData from '../../utils/fetchData';
 
@@ -12,12 +12,16 @@ const Location = ({ setStatus, refresh }) => {
   const [errorMsg, setErrorMsg] = useState('');
   const { classes } = useStoreState((state) => state.classes);
   const { office } = useStoreState((state) => state.offices);
+  const { setOffice } = useStoreActions((actions) => actions.offices);
+
 
   const updateOffice = async (data) => {
     if ('message' in data !== true) {
       setName('');
       setNumber(0);
       setStatus();
+      office.locationIds.push(data.id);
+      setOffice(office);
       await refresh();
     } else {
       setErrorMsg(data.message);

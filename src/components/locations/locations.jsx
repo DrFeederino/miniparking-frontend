@@ -55,8 +55,8 @@ const Locations = () => {
 
   const handleRefreshData = async () => {
     const data = await fetchData(OFFICE_ID_URL(office.id), 'GET', null);
-    setOffice(data);
     const fetchedLocations = await fetchLocationsFromOffice(data);
+    setOffice(data);
     setLocations(fetchedLocations);
   };
 

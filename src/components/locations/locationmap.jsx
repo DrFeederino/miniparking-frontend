@@ -17,7 +17,7 @@ import CloseIcon from '@material-ui/icons/Close';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
 import clsx from 'clsx';
-import { useStoreState } from 'easy-peasy';
+import { useStoreState, useStoreActions } from 'easy-peasy';
 import Spots from '../spots/spots';
 import fetchData from '../../utils/fetchData';
 
@@ -31,6 +31,8 @@ const LocationMap = ({ location, spots, refresh }) => {
   const [range, setRange] = useState([1, location.capacity]);
   const [errorMsg, setErrorMsg] = useState('');
   const { classes } = useStoreState((state) => state.classes);
+  const { office } = useStoreState((state) => state.offices);
+  const { setOffice } = useStoreActions((actions) => actions.offices);
 
   const handleShowing = () => setIsShowing(!isShowing);
   const handleEditing = () => setIsEditing(!isEditing);
@@ -61,6 +63,9 @@ const LocationMap = ({ location, spots, refresh }) => {
   };
 
   const handleDelete = async () => {
+    const { locationIds } = office;
+    office.locationIds = locationIds.filter(locId => locId !== location.id);
+    setOffice(office);
     await fetchData(`locations/${location.id}`, 'DELETE', null);
     await refresh();
   };
