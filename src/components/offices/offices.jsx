@@ -41,6 +41,7 @@ const Offices = () => {
   const handleDelete = async () => {
     if (offices !== null && offices.length && val !== 'none') {
       const { id } = offices[val];
+      setOffice(null);
       await fetchData(`offices/${id}`, 'DELETE', null);
       await handleRefreshData();
     }
